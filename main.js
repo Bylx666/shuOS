@@ -6,14 +6,19 @@ $('launcherStart').onclick = ()=>{
   show('desktop','login1')
   setTimeout(() => {
     show('login1','login2')
-  }, 2000);
+  }, 1000);
   setTimeout(() => {
     show('login2','login3')
-  }, 4000);
+  }, 2000);
   setTimeout(() => {
-    show('login3','desktop')
-    show('login','desktop')
-  }, 6000);
+    show('login3','login4')
+  }, 3000);
+  setTimeout(() => {
+    show('login4','login5')
+  }, 3500);
+  setTimeout(() => {
+    show('login5','desktop')
+  }, 4500);
 }
 
 document.ondragstart = ()=>{return false}
