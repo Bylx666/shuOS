@@ -1,4 +1,5 @@
 html{
+  font-weight: bold;
   cursor: url('asset/cursor.png'),default;
   font-family:"Microsoft YaHei",微软雅黑,"Microsoft JhengHei",华文细黑,STHeiti,MingLiu
 }
@@ -21,6 +22,7 @@ html{
 }
 
 #desktop{
+  font-weight: normal;
   background-image: url('asset/image/desktopWalla.png');
   cursor: default;
 }
@@ -97,6 +99,7 @@ html{
   line-height: 1.5;
   transition: opacity 1s;
 }#login1,#login2,#login3,#login4,#login5{display: none;}
+#login1{font-weight:normal;}
 #login11{position:relative;top: 160px;font-size: 40px;}
 #login12{position:relative;top: 180px;font-size: 30px;}
 #login13{position:relative;font-size: 18px;top: 200px;color: gray;}
@@ -105,6 +108,43 @@ html{
 #login2 hr:after{background: #000;content: '!';padding: 0 5px;position: relative;top:-32px;font-size: 30px;}
 #login22{position:relative;top: 160px;font-size: 24px;color: gray;width: 80%;left: 10%;}
 #login3 img{position: absolute;left: 50%;top: 50%;transform: translate(-50%,-50%);width: 35%;}
+
+#home{
+  /* display: none; */
+  background-image: url('./asset/image/homeBg.png');
+}
+#homeTitle{
+  position: absolute;
+  color: white;
+  font-style: italic;
+  font-size: 32px;
+  left: 30px;
+  top: 20px;
+}
+#homeOrange{
+  display: flex;
+  top: 65px;
+  position: absolute;
+  left: 20px;
+}
+.homeOrangediv{
+  margin: 3px;
+  width: 36px;
+  height: 20px;
+  background-color: rgba(0, 151, 233, .84);
+  border: 2px solid rgba(0, 151, 233, .84);
+  border-radius: 3px;
+  transform: skewX(-20deg);
+}
+.homeOrangediv.emp{
+  background-color: white;
+}
+#homeItemBar{
+  display: flex;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
 
 @media screen and (max-width:800px) {
   div{

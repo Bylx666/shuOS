@@ -1,5 +1,6 @@
 var $ = (el)=> document.getElementById(el)
 var show = (el1,el2) => {$(el1).style.display="none";$(el2).style.display="initial"}
+var hide = (el) => {$(el).style.display="none"}
 
 $('launcherStart').onclick = ()=>{
   show('desktop','login')
@@ -17,7 +18,8 @@ $('launcherStart').onclick = ()=>{
     show('login4','login5')
   }, 3500);
   setTimeout(() => {
-    show('login5','desktop')
+    show('login','home')
+    hide('login1');hide('login2');hide('login3');hide('login4');hide('login5')
   }, 4500);
 }
 
