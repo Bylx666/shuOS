@@ -2,13 +2,20 @@ const http = require('http')
 const fs = require('fs')
 const path = require('path')
 
+const privatef = (file) => {
+  let pathname = path.join(__dirname,file)
+  return fs.readFileSync(pathname)
+}
+const publicf = (file) => fs.readFileSync(file)
+
 var port = process.env.PORT || 8088
 var host = process.env.HOSTNAME || 'localhost'
-http.createServer((req,res)=>{
-  let pathName = path.join(__dirname,'home.html')
-  let page = fs.readFileSync(pathName)
-  res.write(page)
-  res.end()
+const app = http.createServer((req,res)=>{
+  let urlP = new URL(req.url,`http://${req.headers.host}`).searchParams
+  let url = req.url
+  console.log(url)
+
 }).listen(port)
 
 console.log(`http://${host}:${port}`)
+module.exports = app
