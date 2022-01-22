@@ -1,0 +1,22 @@
+{
+  "name": "bh-desktop",
+  "version": "1.0.0",
+  "description": "bh online desktop powered by nodejs desuno",
+  "main": "api/index.js",
+  "scripts": {
+    "test": "node api/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bylx666/bh3.git"
+  },
+  "keywords": [
+    "desktop"
+  ],
+  "author": "bylx666",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/Bylx666/bh3/issues"
+  },
+  "homepage": "https://github.com/Bylx666/bh3#readme"
+}
