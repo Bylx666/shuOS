@@ -7,7 +7,7 @@ var host = process.env.HOSTNAME || 'localhost'
 http.createServer((req,res)=>{
   let pathName = path.join(__dirname,'home.html')
   let page = fs.readFileSync(pathName)
-  res.write(pathName)
+  res.write(page)
   res.end()
 }).listen(port)
 
