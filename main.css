@@ -1,6 +1,74 @@
-#test{
-  position: absolute;
-  width: 100px;
-  height: 100px;
-  background-color: aqua;
+body{
+  --bg: url('asset/system/desktopWalla.png') center/cover;
+  --task-bar-color: rgba(0,0,0,.7);
+  --theme: 255,255,255; /* dark or light */
+  --theme-color: 233,81,147;
+  --desktop-item-direction: column;
+  --desktop-item-position: unset;
 }
+#background{
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg) no-repeat;
+}
+#taskbar{
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  height: 40px;
+  width: 100%;
+  background-color: var(--task-bar-color);
+  box-shadow: 0 0 3px var(--task-bar-color);
+  display: flex;
+}
+  .taskbar_task{
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+  }.taskbar_task img{
+    height: 30px;
+    width: 30px;
+    margin: 5px;
+  }.taskbar_task:hover{
+    background-color: rgba(var(--theme),.3);
+  }.taskbar_task.active{
+    box-sizing: border-box;
+    border-bottom: 3px solid rgba(var(--theme-color),.7);
+  }
+#desktop{
+  right: 0;left: var(--desktop-item-position);top: 0;
+  height: calc(100% - 40px);
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  position: absolute;
+  flex-flow: var(--desktop-item-direction) wrap-reverse;
+}
+  .desktop_item{
+    margin: 10px;
+    width: 100px;
+    height: 120px;
+    position: relative;
+    border-radius: 10px;
+    box-sizing: border-box;
+    cursor: pointer;
+  }.desktop_item.system{
+    background-color: rgba(var(--theme-color),.3);
+  }.desktop_item:hover{
+    background-color: rgba(var(--theme),.3);
+  }.desktop_item img{
+    width: 60px;
+    height: 60px;
+    margin: 10px 20px;
+  }.desktop_item span{
+    position: absolute;
+    left: 0; width: 100%;
+    top: calc(50% + 36px);transform: translateY(-50%);
+    font-size: 20px;
+    text-align: center;
+    color: white;
+    text-shadow: 1px 1px 2px black;
+  }

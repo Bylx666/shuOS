@@ -4,12 +4,27 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>bhDesktop</title>
+  <title>shuOS</title>
   <link rel="stylesheet" href="main.css">
-  <link rel="shortcut icon" href="favicon.png" type="image/png">
+  <link rel="shortcut icon" href="asset/logo.png" type="image/png">
 </head>
 <body>
-  <div id="test"></div>
+  <div id="background"></div>
+  <div id="taskbar">
+    <div class="taskbar_task">
+      <img src="asset/logo.png" alt="start">
+    </div>
+  </div>
+  <div id="desktop">
+    <div class="desktop_item system">
+      <img src="asset/system/setting.svg" alt="Settings"/>
+      <span>Settings</span>
+    </div>
+    <div class="desktop_item">
+      <img src="asset/system/help.svg" alt="help"/>
+      <span>Help</span>
+    </div>
+  </div>
 </body>
 <script src="main.js"></script>
 </html>
