@@ -8,7 +8,7 @@ const privatef = (file) => {
 }
 const publicf = (file) => fs.readFileSync(file)
 
-var port = process.env.PORT || 8088
+var port = process.env.PORT || 3456
 var host = process.env.HOSTNAME || 'localhost'
 const app = http.createServer((req,res)=>{
   let urlP = new URL(req.url,`http://${req.headers.host}`).searchParams

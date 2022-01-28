@@ -1,0 +1,5 @@
+{
+  "static": "./api-static",
+  "api": "localhost:3456",
+  "use": "static"
+}

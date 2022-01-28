@@ -1,11 +1,25 @@
 body{
   --bg: url('asset/system/desktopWalla.png') center/cover;
   --task-bar-color: rgba(0,0,0,.7);
-  --theme: 255,255,255; /* dark or light */
+  --theme: 255,255,255; --theme-rev: 0,0,0; --svg-inv:0; /* black or white */
   --theme-color: 233,81,147;
-  --desktop-item-direction: column;
-  --desktop-item-position: unset;
+  --desktop-item-direction: column wrap-reverse;
+  --desktop-item-img-radius: 10%;
+
+  overflow: hidden;
+  user-select: none;
+}.solidColor{
+  transition: filter 0.2s;
+  filter: invert(var(--svg-inv));
+}span{
+  transition: color 0.2s;
 }
+iframe{
+  border: none;
+  height: 100%;
+  width: 100%;
+}
+
 #background{
   position: fixed;
   left: 0;
@@ -15,11 +29,13 @@ body{
   background: var(--bg) no-repeat;
 }
 #taskbar{
+  z-index: 100;
   position: fixed;
   left: 0;
   bottom: 0;
   height: 40px;
   width: 100%;
+  transition: background-color 0.2s, height 0.5s;
   background-color: var(--task-bar-color);
   box-shadow: 0 0 3px var(--task-bar-color);
   display: flex;
@@ -32,20 +48,20 @@ body{
     height: 30px;
     width: 30px;
     margin: 5px;
-  }.taskbar_task:hover{
+  }.taskbar_task:hover,.taskbar_task:active{
     background-color: rgba(var(--theme),.3);
   }.taskbar_task.active{
     box-sizing: border-box;
     border-bottom: 3px solid rgba(var(--theme-color),.7);
   }
 #desktop{
-  right: 0;left: var(--desktop-item-position);top: 0;
+  left: 0;top: 0;
   height: calc(100% - 40px);
   width: 100%;
   overflow: hidden;
   display: flex;
   position: absolute;
-  flex-flow: var(--desktop-item-direction) wrap-reverse;
+  flex-flow: var(--desktop-item-direction);
 }
   .desktop_item{
     margin: 10px;
@@ -57,18 +73,173 @@ body{
     cursor: pointer;
   }.desktop_item.system{
     background-color: rgba(var(--theme-color),.3);
-  }.desktop_item:hover{
+  }.desktop_item:hover,.desktop_item:active{
     background-color: rgba(var(--theme),.3);
   }.desktop_item img{
     width: 60px;
     height: 60px;
     margin: 10px 20px;
+    border-radius: var(--desktop-item-img-radius);
   }.desktop_item span{
     position: absolute;
     left: 0; width: 100%;
     top: calc(50% + 36px);transform: translateY(-50%);
     font-size: 20px;
     text-align: center;
-    color: white;
+    color: rgba(var(--theme),1);
     text-shadow: 1px 1px 2px black;
   }
+
+.ShuWindow{
+  transition: background-color 0.2s;
+  position: absolute;left: 0;top: 0;
+  box-shadow: 0 0 3px rgb(var(--theme-rev));
+  border-radius: 8px 8px 0 0;
+  min-width: 90px;min-height: 60px;
+} .ShuWindow .header{
+    display: flex;
+    position: relative;
+    width: 100%;
+    height: 30px;
+    transition: inherit;
+    background-color: rgb(var(--theme-rev));
+    border-radius: inherit;
+  } .ShuWindow .header img{
+      margin: 5px;
+      height: 20px;
+      width: 20px;
+    }
+    .ShuWindow .header span{
+      position: absolute;
+      width: calc(100% - 110px);
+      left: 28px;
+      top: 2px;
+      text-align: center;
+      font-size: 20px;
+      color: rgb(var(--theme));
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .ShuWindow .header .buttons{
+      position: absolute;
+      right: 0;
+      opacity: 0;
+      transition: all 0.2s;
+      display: flex;
+      flex-flow: row-reverse;
+    }
+    .ShuWindow .header .buttons:hover{
+      opacity: 1;
+    } .ShuWindow .header .buttons .button{
+        margin: 5px;
+        border-radius: 10px;
+        width: 20px;
+        height: 20px;
+        box-shadow: 1px 1px 2px rgb(var(--theme)) inset;
+      }.ShuWindow .header .buttons .button:hover{
+        opacity: .5;
+      }.ShuWindow .header .buttons .button.inavailable{
+        background-color: rgba(253, 253, 253, .7);
+      }.ShuWindow .header .buttons .button.inavailable:hover{
+        opacity: 1;
+      }
+  .ShuWindow_close{
+    background-color: rgba(233, 81, 147, .7);
+  }
+  .ShuWindow_maximize{
+    background-color: rgba(0, 160, 233, .7);
+  }
+  .ShuWindow_hide{
+    background-color: rgba(220, 141, 0, .7);
+  }
+  .ShuWindow .content{
+    position: absolute;
+    overflow: hidden;
+    width: 100%;
+    height: calc(100% - 30px);
+    background-color: rgb(var(--theme));
+  }
+  .ShuWindow .draggers div{
+    position: absolute;
+  } .ShuWindow .draggers .lt,.ShuWindow .draggers .rt,.ShuWindow .draggers .lb,.ShuWindow .draggers .rb{
+      width: 5px;
+      height: 5px;
+    }
+    .ShuWindow .draggers .t,.ShuWindow .draggers .b{
+      cursor: ns-resize;
+      width: calc(100% - 6px);
+      height: 3px;
+    }
+    .ShuWindow .draggers .l,.ShuWindow .draggers .r{
+      cursor: ew-resize;
+      width: 3px;
+      height: calc(100% - 6px);
+    }
+    .ShuWindow .draggers .lt{
+      cursor: nw-resize;
+      left: -2px;
+      top: -2px;
+    }
+    .ShuWindow .draggers .rt{
+      cursor: ne-resize;
+      right: -2px;
+      top: -2px;
+    }
+    .ShuWindow .draggers .lb{
+      cursor: sw-resize;
+      left: -2px;
+      bottom: -2px;
+    }
+    .ShuWindow .draggers .rb{
+      cursor: se-resize;
+      right: -2px;
+      bottom: -2px;
+    }
+    .ShuWindow .draggers .t{top: -2px;left: 3px;}
+    .ShuWindow .draggers .b{bottom: -2px;left: 3px;}
+    .ShuWindow .draggers .l{left: -2px;top: 3px;}
+    .ShuWindow .draggers .r{right: -2px;top: 3px;}
+
+@media screen and (max-width:600px) {
+  body{
+    --bg: url('asset/system/desktopWallc.jpg') center/cover;
+  }
+
+  #taskbar{
+    height: 60px;
+    border-radius: 20px 20px 0 0;
+  }
+    .taskbar_task{
+      height: 60px;
+      width: 60px;
+      border-radius: 20px;
+    }.taskbar_task img{
+      height: 50px;
+      width: 50px;
+      margin: 5px;
+    }
+
+    .desktop_item{
+      height: 80px;
+      width: 60px;
+      margin: 15px;
+    }.desktop_item.system{
+      background: none;
+    }.desktop_item img{
+      width: 50px;
+      height: 50px;
+      margin: 5px;
+      background-color: rgba(var(--theme-rev),.3);
+    }.desktop_item.system span{
+      color: rgba(var(--theme-color),.7);
+    }.desktop_item:active{
+      opacity: 0.5;
+    }
+  
+  .ShuWindow{
+    max-width: 100%;
+    min-width: 100%;
+    max-height: 100%;
+    min-width: 100%;
+  }
+}
