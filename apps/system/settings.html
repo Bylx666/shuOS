@@ -1,1 +1,248 @@
-test: Settings
+<div class="list" app="systemSettings"></div>
+<div class="content" app="systemSettings">
+  <div class="item">
+    <span>test</span>
+    
+  </div>
+</div>
+<script>
+get('./asset/system/settings/settings.json', (res, code)=>{
+  if(code!==200) throw new Error(`HTTP ${code}! 
+    While getting './asset/dsystem/settings/settings.json'`)
+  const settings = JSON.parse(res)
+  settings.forEach((item)=>{
+    const dom = document.createElement('div')
+    dom.classList.add('item')
+    dom.insertAdjacentHTML('afterbegin',`
+      <img src="${item.icon}" alt="${item.name}" class="solidColor">
+      <span>${item.name}</span>
+    `)
+    appbody.getElementsByClassName('list')[0].append(dom)
+    dom.onclick = ()=>{
+      Array.from(appbody.getElementsByClassName('list')[0].children, 
+        item=>item.classList.remove('act')
+      )
+      dom.classList.add('act')
+      appbody.getElementsByClassName('content')[0].textContent = null
+      // deal with content data
+      item.content.forEach((content)=>{
+        const contentDom = document.createElement('div')
+        contentDom.className = 'item'
+        appbody.getElementsByClassName('content')[0].append(contentDom)
+        contentDom.insertAdjacentHTML('afterbegin',`
+          <span>${content.name}</span>
+        `)
+        if(content.type==='switch') {
+          sswitch(contentDom, content)
+        }else if(content.type==='palette') {
+          spalette(contentDom, content)
+        }
+      })
+    }
+  })
+})
+
+// setting types
+function sswitch(contentDom, content) {
+  contentDom.insertAdjacentHTML('beforeend',`
+    <div class="switch" app="systemSettings">
+      <div class="switch_ball"></div>
+    </div>
+  `)
+  const switchButton = contentDom.getElementsByClassName('switch')[0]
+  const switchEvent = ()=>{
+    switchButton.classList.add('act')
+    new Function(content.switch.open)()
+    switchButton.onclick = ()=>{
+      switchButton.classList.remove('act')
+      new Function(content.switch.close)()
+      switchButton.onclick = switchEvent
+    }
+  }
+  switchButton.onclick = switchEvent
+}
+function sdefaultButton(contentDom, text) {
+  contentDom.insertAdjacentHTML('beforeend',`
+    <div class="defaultButton" app="systemSettings">
+      ${text}
+    </div>
+  `)
+}
+function spalette(contentDom, content) {
+  sdefaultButton(contentDom, 'palette')
+  const defaultButton = 
+    contentDom.getElementsByClassName('defaultButton')[0]
+  defaultButton.insertAdjacentHTML('beforeend',`
+    <div class="palette" app="systemSettings"></div>
+  `)
+  const paletteDom = contentDom.getElementsByClassName('palette')[0]
+  paletteDom.style.display = 'none'
+  const defaultButtonEvent = ()=>{
+    paletteDom.style.display = null
+    defaultButton.onclick = ()=>{
+      paletteDom.style.display = 'none'
+      defaultButton.onclick = defaultButtonEvent
+    }
+  }
+  defaultButton.onclick = defaultButtonEvent
+
+  const getSize = ()=> paletteDom.getBoundingClientRect()
+  paletteDom.onmousedown = (e)=>{
+    const startSize = [getSize().left, getSize().top]
+    const func = (e)=> new Function('palette' ,content.palette)(
+      changeColor(e.clientX - startSize[0], e.clientY - startSize[1])
+    )
+    void func(e)
+    paletteDom.onmousemove = (e)=>{
+      void func(e)
+    }
+    paletteDom.onmouseup = 
+    paletteDom.onmouseout = ()=>{
+      paletteDom.onmousemove = null
+      paletteDom.onmouseup = null
+      paletteDom.onmouseout = null
+    }
+  }
+  
+  function changeColor(x, y) {
+    const edgeSize = getSize().width
+    const toRgb = (a, b)=> (
+      255 - Math.sqrt((a * a) + (b * b)
+      ) / edgeSize * 255
+    ).toFixed(0).toString()
+    
+    const redPosition = [
+      (2 - Math.sqrt(3)) / 4 * edgeSize, 
+      1 / 4 * edgeSize
+    ]
+    const greenPosition = [
+      (2 + Math.sqrt(3)) / 4 * edgeSize, 
+      1 / 4 * edgeSize
+    ]
+    const bluePosition = [
+      2 / 4 * edgeSize,
+      4 / 4 * edgeSize
+    ]
+    const r = toRgb(x - redPosition[0], y - redPosition[1])
+    const g = toRgb(x - greenPosition[0], y - greenPosition[1])
+    const b = toRgb(x - bluePosition[0], y - bluePosition[1])
+    return `${r}, ${g}, ${b}`
+  }
+}
+</script>
+<style>
+.list[app="systemSettings"]{
+  width: 150px;
+  height: 100%;
+  background: rgba(var(--theme-rev), .3);
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(var(--theme-rev), .7);
+}.list[app="systemSettings"]>.item{
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+  height: 30px;
+  border-bottom: 1px solid rgba(var(--theme-rev), .7);
+  transition: all 0.2s;
+}.list[app="systemSettings"]>.item>img{
+  margin: 5px;
+  width: 20px;
+  height: 20px;
+  transition: inherit;
+}.list[app="systemSettings"]>.item>span{
+  position: absolute;
+  left: 30px;
+  line-height: 30px;
+  font-size: 18px;
+  color: rgb(var(--theme));
+  text-shadow: 0 0 5px rgb(var(--theme-rev));
+  transition: inherit;
+}.list[app="systemSettings"]>.item.act{
+  height: 50px;
+  background: rgba(var(--theme-rev), .7);
+}.list[app="systemSettings"]>.item.act>img{
+  margin: 10px;
+  width: 80px;
+  height: 80px;
+  opacity: .5;
+}.list[app="systemSettings"]>.item.act>span{
+  left: 10px;
+  line-height: 50px;
+  font-size: 24px;
+  color: rgb(var(--theme));
+  text-shadow: 0 0 2px rgb(var(--theme-rev));
+}
+.content[app="systemSettings"]{
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: 150px;
+  top: 0;
+  width: calc(100% - 150px);
+  height: 100%;
+  overflow: hidden scroll;
+}.content[app="systemSettings"]>.item{
+  display: flex;
+}.content[app="systemSettings"]>.item>span{
+  margin: 10px 20px;
+  font-size: 30px;
+  line-height: 50px;
+  max-width: calc(100% - 100px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: rgb(var(--theme-rev));
+}
+.switch[app="systemSettings"]{
+  position: absolute;
+  right: 0;
+  width: 50px;
+  height: 20px;
+  margin: 20px;
+  border: 5px solid rgba(var(--theme-rev), .3);
+  border-radius: 10px;
+  transition: background-color 0.2s;
+}.switch[app="systemSettings"]>.switch_ball{
+  transition: left 0.2s, background-color 0.2s;
+  position: relative;
+  left: -5px;
+  top: -5px;
+  width: 20px;
+  height: 20px;
+  border: 5px solid rgba(var(--theme-rev), .7);
+  border-radius: 10px;
+  background-color: rgba(var(--theme), .7);
+}.switch[app="systemSettings"].act{
+  background-color: rgba(var(--theme-rev), .7);
+}.switch[app="systemSettings"].act>.switch_ball{
+  left: 25px;
+}
+.defaultButton[app="systemSettings"]{
+  position: absolute;
+  right: 0;
+  width: 60px;
+  height: 30px;
+  box-sizing: border-box;
+  margin: 20px;
+  font-size: 15px;
+  color: rgb(var(--theme-rev));
+  text-align: center;
+  line-height: 30px;
+  border: 2px solid rgba(var(--theme-rev));
+  border-radius: 10px;
+}
+.palette[app="systemSettings"]{
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  right: 0;
+  background: rgb(var(--theme));
+  box-shadow: 0 0 3px rgb(var(--theme-rev));
+  background: 
+  linear-gradient(120deg,rgba(255,0,0,.33), rgba(0,0,0,0)),
+  linear-gradient(240deg,rgba(0,255,0,.33), rgba(0,0,0,0)),
+  linear-gradient(0deg,rgba(0,0,255,.33), rgba(0,0,0,0)),
+  rgba(var(--theme),1);
+  border-radius: 50%;
+}
+</style>

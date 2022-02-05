@@ -1,0 +1,27 @@
+<div class="header" app="demoShameless">
+  <span class="title" app="demoShameless">
+    It is shameless to inject such pop-ups! If you want a customed header, 
+    just use js to change its style. If you just keep to remove the header, 
+    you can reference <code>appproc</code> Object to find your wished API.
+  </span>
+</div>
+<script>
+  appproc.dom.getElementsByClassName('header')[0].style.display = 'none'
+  appproc.dom.style.left = 'unset'
+  appproc.dom.style.top = 'unset'
+  appproc.dom.style.right = '0'
+  appproc.dom.style.bottom = '0'
+  appproc.dom.getElementsByClassName('content')[0].style.height = '100%'
+</script>
+<style>
+  .header[app="demoShameless"]{
+    position: absolute;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(var(--theme-rev));
+  }
+  .title[app="demoShameless"]{
+    color: rgb(var(--theme));
+  }
+</style>

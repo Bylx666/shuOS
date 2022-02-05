@@ -1,5 +1,26 @@
 [
   {
-    "id": ""
+    "id": "demo.deskpin",
+    "type": "inset",
+    "onlyOne": true,
+    "src": "./apps/demo/deskpin.html",
+    "title": "DeskPin~",
+    "icon": "./asset/demo/deskpin.svg",
+    "solidImg": true,
+    "disableButtons": [false, false, false],
+    "disableResize": false,
+    "width": 300,
+    "height": "600px"
+  },
+  {
+    "id": "demo.shameless",
+    "type": "inset",
+    "src": "./apps/demo/shameless.html",
+    "title": "Shameless!",
+    "icon": "./asset/demo/shameless.svg",
+    "solidImg": true,
+    "width": 300,
+    "height": 100,
+    "disableResize": true
   }
 ]

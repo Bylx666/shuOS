@@ -1,0 +1,100 @@
+<span class="title" app="systemTaskmanager">
+  Tasks
+</span>
+<div class="applist" app="systemTaskmanager"></div>
+<div class="close" app="systemTaskmanager">Close</div>
+<script>
+  const listdom = appbody.getElementsByClassName('applist')[0]
+  var applist = []
+  var selected = {}
+  activeApps.forEach((app)=>{
+    new AppDom(app)
+  })
+  function AppDom(proc) {
+    this.dom = document.createElement('div')
+    this.dom.className = 'appdom'
+    applist.push(this)
+    this.processId = proc.processId
+    this.appid = proc.appid
+    this.dom.insertAdjacentHTML('afterbegin',`
+      <span class="pid">${this.processId}</span>
+      <span class="appid">${this.appid}</span>
+    `)
+    this.dom.onclick = ()=>{
+      selected = this
+      appbody.getElementsByClassName('close')[0].classList.add('act')
+      appbody.getElementsByClassName('close')[0].onclick = closeClick
+      applist.forEach((app)=>{
+        app.dom.style.background = null
+      })
+      this.dom.style.background = 'rgba(var(--theme-rev),.3)'
+    }
+    this.remove = ()=>{
+      proc.remove()
+    }
+    listdom.append(this.dom)
+  }
+  const onopen = (proc)=>{
+    new AppDom(proc)
+  }
+  const onclose = (proc)=>{
+    applist.forEach((app,ind)=>{
+      if(app.processId===proc.processId) {
+        applist.splice(ind, 1)
+        app.dom.remove()
+      }
+    })
+  }
+  const evo = new ShuEvent('appOpen', onopen)
+  const evc = new ShuEvent('appClose', onclose)
+  const closeClick = ()=>{
+    selected.remove()
+    appbody.getElementsByClassName('close')[0].classList.remove('act')
+    appbody.getElementsByClassName('close')[0].onclick = null
+    selected = null
+  }
+</script>
+<style>
+  .title[app="systemTaskmanager"]{
+    display: block;
+    color: rgb(var(--theme-rev));
+    font-size: 30px;
+    margin: 16px;
+  }
+  .applist[app="systemTaskmanager"]{
+    width: 100%;
+    height: calc(100% - 80px);
+    overflow: hidden scroll;
+  }
+  .applist[app="systemTaskmanager"] > .appdom{
+    height: 50px;
+    margin: 10px;
+    padding-left: 20px;
+    line-height: 50px;
+    font-size: 24px;
+    color: rgb(var(--theme-rev));
+    border-radius: 10px;
+  }.applist[app="systemTaskmanager"] > .appdom:hover,
+   .applist[app="systemTaskmanager"] > .appdom:active{
+    background-color: rgba(var(--theme-rev),.3);
+  }
+  .close[app="systemTaskmanager"]{
+    position: absolute;
+    right: 30px;
+    bottom: 20px;
+    width: 100px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    box-sizing: border-box;
+    color: rgb(var(--theme));
+    background-color: rgba(var(--theme-rev),.5);
+    border-radius: 20px;
+    font-size: 24px;
+  }.close[app="systemTaskmanager"].act{
+    background-color: rgba(var(--theme-color),.7);
+  }.close[app="systemTaskmanager"].act:hover,
+   .close[app="systemTaskmanager"].act:active{
+    opacity: 0.5;
+  }
+</style>

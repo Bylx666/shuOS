@@ -1,0 +1,36 @@
+[
+  {
+    "name": "theme",
+    "icon": "./asset/system/settings/appearance.svg",
+    "content": [
+      {
+        "name": "Use dark theme",
+        "type": "switch",
+        "switch": {
+          "open": "globalTheme.change('dark')",
+          "close": "globalTheme.change('light')"
+        }
+      },
+      {
+        "name": "Theme color",
+        "type": "palette",
+        "palette": "document.body.style.setProperty('--theme-color', palette)"
+      },
+      {
+        "name": "jibddddddddddddddda",
+        "type": "",
+        "input": "document.body.style.setProperty('--theme-color', input)"
+      }
+    ]
+  },
+  {
+    "name": "t",
+    "icon": "./asset/system/settings/appearance.svg",
+    "content": [
+      {
+        "name": "g",
+        "type": "switch"
+      }
+    ]
+  }
+]

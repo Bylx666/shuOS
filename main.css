@@ -1,11 +1,11 @@
 body{
-  --bg: url('asset/system/desktopWalla.png') center/cover;
+  
   --task-bar-color: rgba(0,0,0,.7);
   --theme: 255,255,255; --theme-rev: 0,0,0; --svg-inv:0; /* black or white */
   --theme-color: 233,81,147;
   --desktop-item-direction: column wrap-reverse;
   --desktop-item-img-radius: 10%;
-
+  /* == variables end == */
   overflow: hidden;
   user-select: none;
 }.solidColor{
@@ -20,41 +20,65 @@ iframe{
   width: 100%;
 }
 
-#background{
+#errorMessage{
+  position: absolute;
+  z-index: 1000;
+  color: red;
+  background: white;
+}
+
+#background[app="shu"]{
   position: fixed;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  background: var(--bg) no-repeat;
+  background: 
+    url('asset/system/desktopWalla.png') center/cover 
+    no-repeat;
 }
-#taskbar{
+#taskbar[app="shu"]{
   z-index: 100;
   position: fixed;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
   bottom: 0;
   height: 40px;
-  width: 100%;
-  transition: background-color 0.2s, height 0.5s;
+  max-width: 100%;
+  border-radius: 5px 5px 0 0;
+  padding: 5px 5px 3px 5px;
+  transition: background-color 0.2s, bottom 0.5s;
   background-color: var(--task-bar-color);
   box-shadow: 0 0 3px var(--task-bar-color);
   display: flex;
 }
-  .taskbar_task{
-    width: 40px;
+  .taskbar_task[app="shu"]{
+    display: flex;
     height: 40px;
+    border-radius: 5px;
+    margin: 0 3px;
     overflow: hidden;
-  }.taskbar_task img{
+  }.taskbar_task[app="shu"].hideTitle span{
+    display: none;
+  }.taskbar_task[app="shu"] img{
     height: 30px;
     width: 30px;
     margin: 5px;
-  }.taskbar_task:hover,.taskbar_task:active{
+  }.taskbar_task[app="shu"] span{
+    padding: 0 10px 0 0;
+    color: rgb(var(--theme));
+    font-size: 27px;
+    line-height: 40px;
+  }.taskbar_task[app="shu"]:hover,.taskbar_task:active{
     background-color: rgba(var(--theme),.3);
-  }.taskbar_task.active{
+  }.taskbar_task[app="shu"].active{
     box-sizing: border-box;
     border-bottom: 3px solid rgba(var(--theme-color),.7);
+  }.taskbar_task[app="shu"].focused{
+    opacity: 0.7;
+    box-shadow: 0 0 3px rgb(var(--theme)) inset;
   }
-#desktop{
+#desktop[app="shu"]{
   left: 0;top: 0;
   height: calc(100% - 40px);
   width: 100%;
@@ -63,7 +87,7 @@ iframe{
   position: absolute;
   flex-flow: var(--desktop-item-direction);
 }
-  .desktop_item{
+  .desktop_item[app="shu"]{
     margin: 10px;
     width: 100px;
     height: 120px;
@@ -71,16 +95,16 @@ iframe{
     border-radius: 10px;
     box-sizing: border-box;
     cursor: pointer;
-  }.desktop_item.system{
+  }.desktop_item[app="shu"].system{
     background-color: rgba(var(--theme-color),.3);
-  }.desktop_item:hover,.desktop_item:active{
+  }.desktop_item[app="shu"]:hover,.desktop_item:active{
     background-color: rgba(var(--theme),.3);
-  }.desktop_item img{
+  }.desktop_item[app="shu"] img{
     width: 60px;
     height: 60px;
     margin: 10px 20px;
     border-radius: var(--desktop-item-img-radius);
-  }.desktop_item span{
+  }.desktop_item[app="shu"] span{
     position: absolute;
     left: 0; width: 100%;
     top: calc(50% + 36px);transform: translateY(-50%);
@@ -96,7 +120,7 @@ iframe{
   box-shadow: 0 0 3px rgb(var(--theme-rev));
   border-radius: 8px 8px 0 0;
   min-width: 90px;min-height: 60px;
-} .ShuWindow .header{
+} .ShuWindow>.header{
     display: flex;
     position: relative;
     width: 100%;
@@ -104,12 +128,12 @@ iframe{
     transition: inherit;
     background-color: rgb(var(--theme-rev));
     border-radius: inherit;
-  } .ShuWindow .header img{
+  } .ShuWindow>.header>img{
       margin: 5px;
       height: 20px;
       width: 20px;
     }
-    .ShuWindow .header span{
+    .ShuWindow>.header>span{
       position: absolute;
       width: calc(100% - 110px);
       left: 28px;
@@ -120,7 +144,7 @@ iframe{
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .ShuWindow .header .buttons{
+    .ShuWindow>.header>.buttons{
       position: absolute;
       right: 0;
       opacity: 0;
@@ -128,19 +152,28 @@ iframe{
       display: flex;
       flex-flow: row-reverse;
     }
-    .ShuWindow .header .buttons:hover{
+    .ShuWindow>.header>.buttons:hover{
       opacity: 1;
-    } .ShuWindow .header .buttons .button{
+    } .ShuWindow>.header>.buttons>.button{
         margin: 5px;
         border-radius: 10px;
         width: 20px;
         height: 20px;
         box-shadow: 1px 1px 2px rgb(var(--theme)) inset;
-      }.ShuWindow .header .buttons .button:hover{
+      }.ShuWindow>.header>.buttons>.button.act::after{
+        content: '';
+        position: absolute;
+        margin: 6px;
+        width: 8px;
+        height: 8px;
+        border-radius: 4px;
+        background-color: rgba(var(--theme-rev),.5);
+        box-shadow: 1px 1px 2px rgb(var(--theme));
+      }.ShuWindow>.header>.buttons>.button:hover{
         opacity: .5;
-      }.ShuWindow .header .buttons .button.inavailable{
+      }.ShuWindow>.header>.buttons>.button.inavailable{
         background-color: rgba(253, 253, 253, .7);
-      }.ShuWindow .header .buttons .button.inavailable:hover{
+      }.ShuWindow>.header>.buttons>.button.inavailable:hover{
         opacity: 1;
       }
   .ShuWindow_close{
@@ -152,87 +185,109 @@ iframe{
   .ShuWindow_hide{
     background-color: rgba(220, 141, 0, .7);
   }
-  .ShuWindow .content{
+  .ShuWindow>.content{
     position: absolute;
     overflow: hidden;
     width: 100%;
     height: calc(100% - 30px);
     background-color: rgb(var(--theme));
   }
-  .ShuWindow .draggers div{
+  .ShuWindow>.draggers div{
     position: absolute;
-  } .ShuWindow .draggers .lt,.ShuWindow .draggers .rt,.ShuWindow .draggers .lb,.ShuWindow .draggers .rb{
+  } .ShuWindow>.draggers .lt,.ShuWindow>.draggers .rt,.ShuWindow>.draggers .lb,.ShuWindow>.draggers .rb{
       width: 5px;
       height: 5px;
     }
-    .ShuWindow .draggers .t,.ShuWindow .draggers .b{
+    .ShuWindow>.draggers .t,.ShuWindow>.draggers .b{
       cursor: ns-resize;
       width: calc(100% - 6px);
       height: 3px;
     }
-    .ShuWindow .draggers .l,.ShuWindow .draggers .r{
+    .ShuWindow>.draggers .l,.ShuWindow>.draggers .r{
       cursor: ew-resize;
       width: 3px;
       height: calc(100% - 6px);
     }
-    .ShuWindow .draggers .lt{
+    .ShuWindow>.draggers .lt{
       cursor: nw-resize;
       left: -2px;
       top: -2px;
     }
-    .ShuWindow .draggers .rt{
+    .ShuWindow>.draggers .rt{
       cursor: ne-resize;
       right: -2px;
       top: -2px;
     }
-    .ShuWindow .draggers .lb{
+    .ShuWindow>.draggers .lb{
       cursor: sw-resize;
       left: -2px;
       bottom: -2px;
     }
-    .ShuWindow .draggers .rb{
+    .ShuWindow>.draggers .rb{
       cursor: se-resize;
       right: -2px;
       bottom: -2px;
     }
-    .ShuWindow .draggers .t{top: -2px;left: 3px;}
-    .ShuWindow .draggers .b{bottom: -2px;left: 3px;}
-    .ShuWindow .draggers .l{left: -2px;top: 3px;}
-    .ShuWindow .draggers .r{right: -2px;top: 3px;}
+    .ShuWindow>.draggers .t{top: -2px;left: 3px;}
+    .ShuWindow>.draggers .b{bottom: -2px;left: 3px;}
+    .ShuWindow>.draggers .l{left: -2px;top: 3px;}
+    .ShuWindow>.draggers .r{right: -2px;top: 3px;}
 
+.taskbar_task[app="shu"]>#start{
+  position: absolute;
+  width: 300px;
+  display: none;
+  flex-direction: column-reverse;
+  bottom: 40px;
+  background: rgb(var(--theme));
+  border-radius: 8px;
+  box-shadow: 0 0 3px rgb(var(--theme-rev));
+}.taskbar_task[app="shu"]>#start>.start_item{
+  margin: 3px;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 10px;
+  font-size: 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}.taskbar_task[app="shu"]>#start>.start_item:hover{
+  background: rgba(var(--theme-rev), .3);
+}.taskbar_task[app="shu"]>#start>.start_item:active{
+  background: rgba(var(--theme-rev), .5);
+}
 @media screen and (max-width:600px) {
   body{
     --bg: url('asset/system/desktopWallc.jpg') center/cover;
   }
 
-  #taskbar{
+  #taskbar[app="shu"]{
     height: 60px;
     border-radius: 20px 20px 0 0;
   }
-    .taskbar_task{
+    .taskbar_task[app="shu"]{
       height: 60px;
       width: 60px;
       border-radius: 20px;
-    }.taskbar_task img{
+    }.taskbar_task[app="shu"] img{
       height: 50px;
       width: 50px;
       margin: 5px;
     }
 
-    .desktop_item{
+    .desktop_item[app="shu"]{
       height: 80px;
       width: 60px;
       margin: 15px;
-    }.desktop_item.system{
+    }.desktop_item[app="shu"].system{
       background: none;
-    }.desktop_item img{
+    }.desktop_item[app="shu"] img{
       width: 50px;
       height: 50px;
       margin: 5px;
       background-color: rgba(var(--theme-rev),.3);
-    }.desktop_item.system span{
+    }.desktop_item[app="shu"].system span{
       color: rgba(var(--theme-color),.7);
-    }.desktop_item:active{
+    }.desktop_item[app="shu"]:active{
       opacity: 0.5;
     }
   
