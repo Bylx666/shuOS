@@ -2,9 +2,6 @@ const http = require('http')
 const fs = require('fs')
 const path = require('path')
 
-mongoClient.connect()
-mongoClient
-
 const privatef = (file) => {
   let pathname = path.join(__dirname,file)
   return fs.readFileSync(pathname)
