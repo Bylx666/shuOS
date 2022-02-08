@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/Bylx666/bh3/issues"
   },
-  "homepage": "https://github.com/Bylx666/bh3#readme"
+  "homepage": "https://github.com/Bylx666/bh3#readme",
+  "dependencies": {
+    "mongodb": "^4.3.1"
+  }
 }

@@ -1,45 +1,39 @@
 <div class="list" app="systemSettings"></div>
 <div class="content" app="systemSettings">
   <div class="item">
-    <span>test</span>
-    
+    <span>Settings</span>
   </div>
 </div>
-<script>
-get('./asset/system/settings/settings.json', (res, code)=>{
-  if(code!==200) throw new Error(`HTTP ${code}! 
-    While getting './asset/dsystem/settings/settings.json'`)
-  const settings = JSON.parse(res)
-  settings.forEach((item)=>{
-    const dom = document.createElement('div')
-    dom.classList.add('item')
-    dom.insertAdjacentHTML('afterbegin',`
-      <img src="${item.icon}" alt="${item.name}" class="solidColor">
-      <span>${item.name}</span>
-    `)
-    appbody.getElementsByClassName('list')[0].append(dom)
-    dom.onclick = ()=>{
-      Array.from(appbody.getElementsByClassName('list')[0].children, 
-        item=>item.classList.remove('act')
-      )
-      dom.classList.add('act')
-      appbody.getElementsByClassName('content')[0].textContent = null
-      // deal with content data
-      item.content.forEach((content)=>{
-        const contentDom = document.createElement('div')
-        contentDom.className = 'item'
-        appbody.getElementsByClassName('content')[0].append(contentDom)
-        contentDom.insertAdjacentHTML('afterbegin',`
-          <span>${content.name}</span>
-        `)
-        if(content.type==='switch') {
-          sswitch(contentDom, content)
-        }else if(content.type==='palette') {
-          spalette(contentDom, content)
-        }
-      })
-    }
-  })
+<script>  
+shuSettings.forEach((item)=>{
+  const dom = document.createElement('div')
+  dom.classList.add('item')
+  dom.insertAdjacentHTML('afterbegin',`
+    <img src="${item.icon}" alt="${item.name}" class="solidColor">
+    <span>${item.name}</span>
+  `)
+  appbody.getElementsByClassName('list')[0].append(dom)
+  dom.onclick = ()=>{
+    Array.from(appbody.getElementsByClassName('list')[0].children, 
+      item=>item.classList.remove('act')
+    )
+    dom.classList.add('act')
+    appbody.getElementsByClassName('content')[0].textContent = null
+    // deal with content data
+    item.content.forEach((content)=>{
+      const contentDom = document.createElement('div')
+      contentDom.className = 'item'
+      appbody.getElementsByClassName('content')[0].append(contentDom)
+      contentDom.insertAdjacentHTML('afterbegin',`
+        <span>${content.name}</span>
+      `)
+      if(content.type==='switch') {
+        sswitch(contentDom, content)
+      }else if(content.type==='palette') {
+        spalette(contentDom, content)
+      }
+    })
+  }
 })
 
 // setting types
@@ -50,16 +44,24 @@ function sswitch(contentDom, content) {
     </div>
   `)
   const switchButton = contentDom.getElementsByClassName('switch')[0]
-  const switchEvent = ()=>{
+  const switchOpen = ()=>{
     switchButton.classList.add('act')
     new Function(content.switch.open)()
-    switchButton.onclick = ()=>{
-      switchButton.classList.remove('act')
-      new Function(content.switch.close)()
-      switchButton.onclick = switchEvent
-    }
+    content.status = 'open'
+    switchButton.onclick = switchClose
   }
-  switchButton.onclick = switchEvent
+  const switchClose = ()=>{
+    switchButton.classList.remove('act')
+    new Function(content.switch.close)()
+    content.status = 'close'
+    switchButton.onclick = switchOpen
+  }
+  if(content.status==='open') {
+    switchButton.classList.add('act')
+    switchButton.onclick = switchClose
+  }else {
+    switchButton.onclick = switchOpen
+  }
 }
 function sdefaultButton(contentDom, text) {
   contentDom.insertAdjacentHTML('beforeend',`
@@ -89,9 +91,12 @@ function spalette(contentDom, content) {
   const getSize = ()=> paletteDom.getBoundingClientRect()
   paletteDom.onmousedown = (e)=>{
     const startSize = [getSize().left, getSize().top]
-    const func = (e)=> new Function('palette' ,content.palette)(
-      changeColor(e.clientX - startSize[0], e.clientY - startSize[1])
-    )
+    const func = e => {
+      const finalRgb = 
+        changeColor(e.clientX - startSize[0], e.clientY - startSize[1])
+      new Function('palette' ,content.palette)(finalRgb)
+      content.status = finalRgb
+    }
     void func(e)
     paletteDom.onmousemove = (e)=>{
       void func(e)
@@ -201,6 +206,7 @@ function spalette(contentDom, content) {
   margin: 20px;
   border: 5px solid rgba(var(--theme-rev), .3);
   border-radius: 10px;
+  cursor: pointer;
   transition: background-color 0.2s;
 }.switch[app="systemSettings"]>.switch_ball{
   transition: left 0.2s, background-color 0.2s;
@@ -216,7 +222,10 @@ function spalette(contentDom, content) {
   background-color: rgba(var(--theme-rev), .7);
 }.switch[app="systemSettings"].act>.switch_ball{
   left: 25px;
-}
+}.switch[app="systemSettings"]:hover,
+ .switch[app="systemSettings"]:active{
+   opacity: .5;
+ }
 .defaultButton[app="systemSettings"]{
   position: absolute;
   right: 0;
@@ -230,7 +239,12 @@ function spalette(contentDom, content) {
   line-height: 30px;
   border: 2px solid rgba(var(--theme-rev));
   border-radius: 10px;
-}
+}.defaultButton[app="systemSettings"]:hover,
+ .defaultButton[app="systemSettings"]:active{
+   cursor: pointer;
+   background: rgb(var(--theme-rev));
+   color: rgb(var(--theme));
+ }
 .palette[app="systemSettings"]{
   position: absolute;
   width: 200px;
@@ -244,5 +258,6 @@ function spalette(contentDom, content) {
   linear-gradient(0deg,rgba(0,0,255,.33), rgba(0,0,0,0)),
   rgba(var(--theme),1);
   border-radius: 50%;
+  cursor: crosshair;
 }
 </style>

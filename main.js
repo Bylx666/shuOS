@@ -86,11 +86,20 @@ const get = (url,callback)=>{
   xhr.open('get',url)
   xhr.send()
   xhr.onreadystatechange = ()=>{
-    if(xhr.readyState==4) {
+    if(xhr.readyState===4) {
       callback(xhr.response, xhr.status)
     }
   }
 }
+const postSettings = ()=> {
+  if(desktopStatus.use!=='api') throw new Error('Api mode only!')
+  let xhr = new XMLHttpRequest()
+  xhr.setRequestHeader('content-type','application/json')
+  xhr.open('post',desktopStatus.api)
+  xhr.send(JSON.stringify(shuSettings))
+}
+
+var shuSettings
 
 // change css variables
 const changeCssVar = (a,b)=> document.body.style.setProperty(a,b)
@@ -167,6 +176,7 @@ var apps = [
     height: 600
   }
 ]
+// read and apply configures
 get('./conf.json',(res,code)=>{
   if(code===200) {
     let result = JSON.parse(res)
@@ -178,7 +188,13 @@ get('./conf.json',(res,code)=>{
         if(code===404) return new Error('apps.json not found')
         let result = JSON.parse(res)
         apps = apps.concat(result)
-        desktopInit()
+        shudesktopInit()
+      })
+      get(desktopStatus.static+'settings.json', (res, code)=>{
+        if(code===404) return new Error('settings.json not found')
+        let result = JSON.parse(res)
+        shuSettings = result
+        shusettingsInit()
       })
     }else {
       desktopStatus.use = 'api'
@@ -220,7 +236,7 @@ var desktopStatus = {
   static: null
 }
 // first init for the desktop
-function desktopInit() {
+function shudesktopInit() {
   if(desktopStatus.desktopInited) throw new Error('Do not init desktop twice!')
   desktopStatus.desktopInited = true
 
@@ -268,6 +284,18 @@ function desktopInit() {
       thisApp.show()
     }
     document.getElementById('desktop').append(dom)
+  })
+}
+// init settings
+function shusettingsInit() {
+  shuSettings.forEach(item=>{
+    item.content.forEach(content=>{
+      if(content.status===undefined) return
+      if(content.type==='switch')
+        new Function(content.switch[content.status])()
+      else if(content.type==='palette')
+        new Function('palette', content.palette)(content.status)
+    })
   })
 }
 
@@ -610,13 +638,4 @@ ShuWindow.prototype = {
   get [Symbol.toStringTag]() {
     return 'ShuWindow'
   }
-}
-
-const shuAppFrame = {
-  pid: {
-    
-  },
-  vueLike: {
-    
-  },
 }

@@ -19,7 +19,7 @@
       {
         "name": "jibddddddddddddddda",
         "type": "",
-        "input": "document.body.style.setProperty('--theme-color', input)"
+        "input": ""
       }
     ]
   },
